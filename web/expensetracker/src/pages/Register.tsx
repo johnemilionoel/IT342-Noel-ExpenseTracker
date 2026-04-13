@@ -16,13 +16,15 @@ export default function Register() {
     setLoading(true)
     try {
       const res = await registerUser(form)
-      if (typeof res.data === "string" && res.data.includes("successfully")) {
-        alert("Account created successfully!")
-        navigate("/")
-      } else if (typeof res.data === "string" && res.data.includes("already")) {
-        setError("This email is already registered")
+      const msg = typeof res.data === "string" ? res.data : (res.data.message || res.data.data || "")
+
+      if (msg.includes("successfully")) {
+          alert("Account created successfully!")
+          navigate("/")
+      } else if (msg.includes("already")) {
+          setError("This email is already registered")
       } else {
-        setError(res.data)
+          setError(msg || "Registration failed")
       }
     } catch (err) { setError("Registration failed") }
     finally { setLoading(false) }

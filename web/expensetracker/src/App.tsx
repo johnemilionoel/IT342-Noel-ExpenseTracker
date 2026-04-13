@@ -4,6 +4,7 @@ import Register from "./pages/Register"
 import Dashboard from "./pages/Dashboard"
 import Expenses from "./pages/Expenses"
 import AddExpense from "./pages/AddExpense"
+import OAuthCallback from "./pages/OAuthCallback"
 import Layout from "./components/Layout"
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/oauth-callback" element={<OAuthCallback />} />
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/expenses" element={<Expenses />} />
