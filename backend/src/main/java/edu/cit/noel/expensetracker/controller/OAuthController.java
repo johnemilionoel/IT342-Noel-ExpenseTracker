@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @RestController
@@ -30,19 +32,29 @@ public class OAuthController {
         String firstname = oauthUser.getAttribute("given_name");
         String lastname = oauthUser.getAttribute("family_name");
 
+        // Create user if not exists (auto-register on first Google login)
+        User user;
         if (!userRepository.existsByEmail(email)) {
-
-            User user = new User();
+            user = new User();
             user.setEmail(email);
-            user.setFirstname(firstname);
-            user.setLastname(lastname);
-            user.setPasswordHash("GOOGLE_AUTH");
+            user.setFirstname(firstname != null ? firstname : "");
+            user.setLastname(lastname != null ? lastname : "");
+            user.setPasswordHash("GOOGLE_OAUTH");
             user.setCreatedAt(LocalDateTime.now());
-
-            userRepository.save(user);
+            user = userRepository.save(user);
+        } else {
+            user = userRepository.findByEmail(email).orElseThrow();
         }
 
-        // redirect to React dashboard
-        response.sendRedirect("http://localhost:5173/dashboard");
+        // Redirect to React frontend with user data as query parameters
+        String redirectUrl = String.format(
+            "http://localhost:5173/oauth-callback?id=%d&email=%s&firstname=%s&lastname=%s",
+            user.getId(),
+            URLEncoder.encode(email, StandardCharsets.UTF_8),
+            URLEncoder.encode(user.getFirstname(), StandardCharsets.UTF_8),
+            URLEncoder.encode(user.getLastname(), StandardCharsets.UTF_8)
+        );
+
+        response.sendRedirect(redirectUrl);
     }
 }
