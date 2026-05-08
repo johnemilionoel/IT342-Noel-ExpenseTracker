@@ -1,18 +1,19 @@
-package edu.cit.noel.expensetracker.viewmodel
+package edu.cit.noel.expensetracker.auth
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import edu.cit.noel.expensetracker.data.api.RetrofitClient
-import edu.cit.noel.expensetracker.data.local.AppDatabase
-import edu.cit.noel.expensetracker.data.local.UserEntity
-import edu.cit.noel.expensetracker.data.model.LoginRequest
-import edu.cit.noel.expensetracker.data.model.RegisterRequest
+import edu.cit.noel.expensetracker.common.RetrofitClient
+import edu.cit.noel.expensetracker.common.AppDatabase
+import edu.cit.noel.expensetracker.common.UserEntity
+import edu.cit.noel.expensetracker.auth.LoginRequest
+import edu.cit.noel.expensetracker.auth.RegisterRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+
 
 data class AuthUiState(
     val isLoading: Boolean = false,
@@ -68,21 +69,26 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     if (isSuccess) {
                         // Fetch user info to get ID
+                        val userRes = RetrofitClient.authApi.let {
+                            val url = "api/auth/user?email=$email"
+                            val call = okhttp3.Request.Builder()
+                                .url("${getBaseUrl()}$url")
+                                .build()
+                            RetrofitClient.httpClient.newCall(call).execute()
+                        }
+
                         var userId = 0L
                         var firstname = email.substringBefore("@")
                         var lastname = ""
 
-                        try {
-                            val userRes = authApi.getUser(email)
-                            if (userRes.isSuccessful) {
-                                val data = userRes.body()?.data
-                                if (data != null) {
-                                    userId = (data["id"] as? Double)?.toLong() ?: 0L
-                                    firstname = data["firstname"] as? String ?: firstname
-                                    lastname = data["lastname"] as? String ?: ""
-                                }
-                            }
-                        } catch (_: Exception) {}
+                        if (userRes.isSuccessful) {
+                            val json = JSONObject(userRes.body?.string() ?: "{}")
+                            // Handle ApiResponse wrapper
+                            val data = if (json.has("data") && json.get("data") is JSONObject) json.getJSONObject("data") else json
+                            userId = data.optLong("id", 0)
+                            firstname = data.optString("firstname", firstname)
+                            lastname = data.optString("lastname", "")
+                        }
 
                         userDao.logoutAll()
                         userDao.insertUser(UserEntity(

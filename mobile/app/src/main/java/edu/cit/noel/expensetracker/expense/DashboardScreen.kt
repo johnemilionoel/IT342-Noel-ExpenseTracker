@@ -1,4 +1,4 @@
-package edu.cit.noel.expensetracker.ui.screens
+package edu.cit.noel.expensetracker.expense
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,8 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.cit.noel.expensetracker.ui.theme.*
-import edu.cit.noel.expensetracker.viewmodel.ExpenseUiState
+import edu.cit.noel.expensetracker.common.theme.*
+import edu.cit.noel.expensetracker.expense.ExpenseUiState
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -29,6 +29,7 @@ private val catColors = mapOf(
     "Office Supplies" to Purple, "Utilities" to OrangeWarning,
     "Healthcare" to RedError, "Entertainment" to Pink, "Other" to Gray400
 )
+
 
 @Composable
 fun DashboardScreen(

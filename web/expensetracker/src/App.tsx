@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import Dashboard from "./pages/Dashboard"
-import Expenses from "./pages/Expenses"
-import AddExpense from "./pages/AddExpense"
-import OAuthCallback from "./pages/OAuthCallback"
-import Layout from "./components/Layout"
+import Login from "./features/auth/Login"
+import Register from "./features/auth/Register"
+import Dashboard from "./features/expense/Dashboard"
+import Expenses from "./features/expense/Expenses"
+import AddExpense from "./features/expense/AddExpense"
+import OAuthCallback from "./features/auth/OAuthCallback"
+import Layout from "./shared/Layout"
 
 function App() {
   return (
