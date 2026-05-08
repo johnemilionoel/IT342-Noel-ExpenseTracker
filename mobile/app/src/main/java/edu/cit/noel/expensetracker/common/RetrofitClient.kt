@@ -1,4 +1,4 @@
-package edu.cit.noel.expensetracker.data.api
+package edu.cit.noel.expensetracker.common
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -6,6 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import edu.cit.noel.expensetracker.auth.AuthApi
+import edu.cit.noel.expensetracker.expense.ExpenseApi
 
 object RetrofitClient {
 

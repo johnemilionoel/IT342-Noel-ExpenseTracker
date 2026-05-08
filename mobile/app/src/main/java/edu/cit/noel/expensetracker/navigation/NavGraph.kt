@@ -1,7 +1,6 @@
-package edu.cit.noel.expensetracker.ui.navigation
+package edu.cit.noel.expensetracker.navigation
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -18,10 +17,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import edu.cit.noel.expensetracker.ui.screens.*
-import edu.cit.noel.expensetracker.ui.theme.*
-import edu.cit.noel.expensetracker.viewmodel.AuthViewModel
-import edu.cit.noel.expensetracker.viewmodel.ExpenseViewModel
+import edu.cit.noel.expensetracker.auth.*
+import edu.cit.noel.expensetracker.expense.*
+import edu.cit.noel.expensetracker.common.theme.*
+import edu.cit.noel.expensetracker.auth.AuthViewModel
+import edu.cit.noel.expensetracker.expense.ExpenseViewModel
+import androidx.compose.ui.unit.dp
+import edu.cit.noel.expensetracker.auth.*
+import edu.cit.noel.expensetracker.expense.*
+import edu.cit.noel.expensetracker.common.theme.*
 
 object Routes {
     const val LOGIN = "login"
@@ -93,7 +97,7 @@ fun NavGraph(
                                 selectedTextColor = Blue600,
                                 unselectedIconColor = Gray400,
                                 unselectedTextColor = Gray400,
-                                indicatorColor = Blue100
+                                indicatorColor = Blue50
                             )
                         )
                     }
